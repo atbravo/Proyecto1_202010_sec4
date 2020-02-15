@@ -2,6 +2,7 @@ package model.logic;
 
 import model.data_structures.ArregloDinamico;
 import model.data_structures.IArregloDinamico;
+import model.data_structures.Lista;
 
 /**
  * Definicion del modelo del mundo
@@ -13,6 +14,12 @@ public class Modelo {
 	 */
 	private IArregloDinamico datos;
 	
+	
+	
+	/***
+	 * La lista de los comparendos 
+	 */
+	private Lista<Comparendo> comparendos;
 	/**
 	 * Constructor del modelo del mundo con capacidad predefinida
 	 */
