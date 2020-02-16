@@ -1,5 +1,6 @@
 package view;
 
+import model.logic.Comparendo;
 import model.logic.Modelo;
 
 public class View 
@@ -27,7 +28,26 @@ public class View
 
 			System.out.println(mensaje);
 		}		
-		
+		/**
+		 * Imprime los resultados tras haber cargado los comparendos a la lista
+		 */
+		public void imprimirResultadosCarga(int tamaño, Comparendo primero, Comparendo ultimo, double[] minimax)
+		{
+			System.out.println("Total comparendos: " +  tamaño);
+			System.out.println();
+			System.out.println("Primer comparendo:");
+			System.out.println();
+			System.out.println(primero);
+			System.out.println();
+			System.out.println("Ultimo Comparendo:");
+			System.out.println();
+			System.out.println(ultimo);
+			System.out.println();
+			System.out.println("Zona minimax:" );
+			System.out.println("(" + minimax[0] + "," + minimax[1] + ") (" + minimax[2] + "," + minimax[3] + ")");
+
+
+		}
 		public void printModelo(Modelo modelo)
 		{
 			// TODO implementar

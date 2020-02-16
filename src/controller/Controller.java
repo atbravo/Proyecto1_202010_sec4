@@ -21,6 +21,7 @@ public class Controller {
 	{
 		view = new View();
 		modelo = new Modelo();
+		view.imprimirResultadosCarga(modelo.darTamano(), modelo.get(0), modelo.get(modelo.darTamano()-1), modelo.darZonaMinimax());
 	}
 		
 	public void run() 
