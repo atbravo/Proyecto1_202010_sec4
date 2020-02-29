@@ -1,25 +1,27 @@
 package model.data_structures;
 
+import java.util.Iterator;
 
-public class Lista<T>  implements ILista<T> {
+public class Lista<T> implements ILista<T>, Iterable<T> {
 	private Node cabeza;
 	private Node actual;
 	private Node ultimo;
+	private int tamaño;
 
 	public Lista() {
 		cabeza = null;
 		actual = null;
 		ultimo = null;
+		tamaño = 0;
 	}
-	
-	public void agregarAlFinal(T elemento)
-	{
-		if(cabeza == null)
+
+	public void agregarAlFinal(T elemento) {
+		if (cabeza == null)
 			crearLista(elemento);
-		else
-		{
+		else {
 			ultimo.asignarSiguiente(new Node<T>(elemento));
 			ultimo = ultimo.darSiguiente();
+			tamaño++;
 		}
 	}
 
@@ -32,6 +34,7 @@ public class Lista<T>  implements ILista<T> {
 		cabeza = new Node<T>(cabe);
 		actual = cabeza;
 		ultimo = cabeza;
+		tamaño = 1;
 	}
 
 	/**
@@ -42,7 +45,7 @@ public class Lista<T>  implements ILista<T> {
 		if (cabeza == null)
 			crearLista(elemento);
 		else {
-			
+
 			Node siguiente = cabeza.darSiguiente();
 			while (siguiente != null) {
 				actual = siguiente;
@@ -50,6 +53,7 @@ public class Lista<T>  implements ILista<T> {
 			}
 			actual.asignarSiguiente(nuevo);
 			ultimo = actual.darSiguiente();
+			tamaño++;
 		}
 		return cabeza;
 	}
@@ -59,34 +63,35 @@ public class Lista<T>  implements ILista<T> {
 	 */
 	public void eliminarElemento(T elemento) {
 		Node act = cabeza;
-
 		if (cabeza != null && cabeza.darElemento().equals(elemento)) {
 			Node nuevaCab = cabeza.darSiguiente();
 			cabeza.asignarSiguiente(null);
 			cabeza = nuevaCab;
+			tamaño--;
 			return;
 		}
 
 		while (act != null && act.darSiguiente() != null) {
 			if (actual.darSiguiente().darElemento().equals(elemento))
 				actual.borrarSiguiente();
+			tamaño--;
 		}
 	}
 
 	public int darTamaño() {
-		Node act = cabeza;
-		int i = 0;
-		while (act != null) {
-			i++;
-			act = act.darSiguiente();
-		}
-		return i;
+		return tamaño;
 	}
 
-	public T darElementoPosicion(int pos) {
+	public T darElementoPosicion(int pos)
+	{
 		Node act = cabeza;
 		int i = 0;
-		while (act != null && i < pos) {
+		
+		if (pos == tamaño - 1)
+			return (T) ultimo.darElemento();
+		
+		while (act != null && i < pos)
+		{
 			i++;
 			act = act.darSiguiente();
 		}
@@ -108,7 +113,6 @@ public class Lista<T>  implements ILista<T> {
 			actual = cabeza;
 		return (T) actual.darElemento();
 	}
-
 
 	public T darElementoActual() {
 		if (actual != null)
@@ -144,5 +148,33 @@ public class Lista<T>  implements ILista<T> {
 			}
 		}
 		return (T) actual.darElemento();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new IteradorLista();
+	}
+
+	protected class IteradorLista implements Iterator<T> {
+		public IteradorLista() {
+			actual = cabeza;
+		}
+
+		public boolean hasNext() {
+			if (actual == null || actual.darSiguiente() == null)
+				return false;
+			return actual.darSiguiente().darElemento() != null;
+		}
+
+		public T next() {
+			if (!hasNext())
+				return null;
+			actual = actual.darSiguiente();
+			return (T) actual.darElemento();
+		}
+
+		public void remove() {
+
+		}
 	}
 }
