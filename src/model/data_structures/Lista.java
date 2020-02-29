@@ -2,6 +2,8 @@ package model.data_structures;
 
 import java.util.Iterator;
 
+import com.sun.corba.se.impl.oa.toa.TOA;
+
 public class Lista<T> implements ILista<T>, Iterable<T> {
 	private Node cabeza;
 	private Node actual;
@@ -155,6 +157,7 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 		}
 		return (T) actual.darElemento();
 	}
+	
 
 	@Override
 	public Iterator<T> iterator() {
