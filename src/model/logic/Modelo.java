@@ -2,6 +2,7 @@ package model.logic;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +23,7 @@ public class Modelo {
 
 
 	public final String RUTA = "./data/comparendos_dei_2018_small.geojson";
+	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 
 	/**
 	 * Atributos del modelo del mundo
@@ -165,5 +167,56 @@ public class Modelo {
 		double[] respuesta = {minLatitud, minLongitud, maxLatitud, maxLongitud};
 		return respuesta;
 	}
-
+	/**
+	 * Busca el primero comparendo que aparezca en la lista con la localidad buscada
+	 * si no lo encuentra lanza una excepcion
+	 * @param Localidad, la localidad buscada
+	 * @return el primer comparendo encontrado con la localidad
+	 * @throws Exception si no encuentra ninguno, avisa al usuario
+	 */
+	public Comparendo buscarPrimeroenLocalidad(String localidad) throws Exception
+	{
+		//Es mas eficaz buscarlo en la lista desordenada que ordenarla y luego buscarlo
+		Comparendo buscado = null;
+		for(int i = 0; i < comparendos.darTamaño() && buscado == null; i++)
+		{
+			if(comparendos.darElementoPosicion(i).darDetalles().darLocalidad().equals(localidad))
+				buscado = comparendos.darElementoPosicion(i);
+		}
+		if(buscado == null)
+			throw new Exception(COMPARENDO_NO_ENCONTRADO);
+		return buscado;
+	}
+	public Comparendo[] copiarComparendos()
+	{
+		Comparendo[] comp = new Comparendo[comparendos.darTamaño()];
+		comparendos.reiniciarActual();
+		for (int i = 0; i < comparendos.darTamaño(); i++) {
+			comp[i] = comparendos.darElementoActual();
+			comparendos.avanzarActual();
+		}
+		return comp;
+	}
+	/**
+	 * retorna una lista enlazada con los comparendos en una fecha dada
+	 * @param Fecha la fecha solicitada
+	 * @return lista con comparendos en la fecha buscada
+	 */
+	public  Lista<Comparendo> darComparendosenFecha(String fecha)
+	{ 
+		Comparendo[] ordenados = copiarComparendos();
+		Sorting.mergeSort(ordenados);
+		Lista<Comparendo> respuesta = new Lista<Comparendo>();
+		boolean seguir = true;
+		Comparendo ficticio = new Comparendo("", "",0,0,0,0, "",fecha,"", "","","","");
+		for(int i = 0; i < ordenados.length && seguir; i++)
+		{
+			int iguales = ficticio.compareTo(ordenados[i]);
+			if(i == 0)
+				respuesta.agregarAlFinal(ordenados[i]);
+			else if(i < 0)
+				seguir = false;
+		}
+		return respuesta;
+	}
 }

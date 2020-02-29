@@ -1,10 +1,18 @@
 package view;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import model.logic.Comparendo;
 import model.logic.Modelo;
 
-public class View 
+/**
+ *Clase que permite la interaccion del usuario y el programa
+ */
+public class View<E> 
 {
+	
+		private final String CANCELAR = "CANCELAR";
 	    /**
 	     * Metodo constructor
 	     */
@@ -12,7 +20,56 @@ public class View
 	    {
 	    	
 	    }
-	    
+	    /**
+	     * Despliega menu de opciones al usuario
+	     * @return la opcion escogida por el usuario
+	     */
+	    public int darOpciones()
+	    {
+	    	int respuesta = 0;
+	    	BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	    	System.out.println("Escoja que opcion quiere realizar:");
+	    	System.out.println("1. Buscar un comparendo en localidad especifica");
+	    	try
+	    	{
+	    		respuesta = Integer.parseInt(bf.readLine());
+	    	}
+	    	catch(Exception e)
+	    	{
+	    		darOpciones();
+	    	}
+	    	return respuesta;
+	    }
+	    /**
+	     * Solicita al usuario que ingrese lo que desea buscar los copmarendos, retorna null para cancelar
+	     * @param parametro, lo que se solicitara al usuario
+	     * @return la localidad solicitada o Null si desea cancelar 
+	     */
+	    public String pedir(String parametro)
+	    {
+	    	System.out.println("Favor inserte " + parametro + " buscada.");
+	    	System.out.println("Escriba CANCELAR para volver al menu principal");
+	    	BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	    	String respuesta = "";
+	    	try{
+	    		respuesta = bf.readLine();
+	    	}
+	    	catch(Exception e)
+	    	{
+	    		pedir(parametro);
+	    	}
+	    	if (respuesta.equals(CANCELAR))
+	    			return null;
+	    	return respuesta;
+	    }
+	    /**
+	     * Imprime el objeto generico que recibe
+	     * @param cosa, objeto a imprimir, debe poder convertirse a string (los copmarendos si sirven)
+	     */
+	    public void imprimir(Object cosa)
+	    {
+	    	System.out.println(cosa);
+	    }
 		public void printMenu()
 		{
 			System.out.println("1. Crear Arreglo Dinamico de Strings");

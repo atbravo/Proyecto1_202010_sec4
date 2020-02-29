@@ -130,7 +130,13 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 		return (T) actual.darElemento();
 
 	}
-
+	/**
+	 * define el elemento actual como la cabeza
+	 */
+	public void reiniciarActual()
+	{
+		actual = cabeza;
+	}
 	public T volverActual() {
 		Node act = cabeza;
 		boolean ya = false;

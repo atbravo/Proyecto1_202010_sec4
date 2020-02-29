@@ -1,7 +1,11 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
+import model.data_structures.Lista;
+import model.logic.Comparendo;
 import model.logic.Modelo;
 import view.View;
 
@@ -22,8 +26,45 @@ public class Controller {
 		view = new View();
 		modelo = new Modelo();
 		view.imprimirResultadosCarga(modelo.darTamano(), modelo.get(0), modelo.get(modelo.darTamano()-1), modelo.darZonaMinimax());
+		iniciarPrograma();
 	}
+	/**
+	 * Este metodo llama a la vista para que despliegue el menu de opciones al usuario y
+	 * ejecuta la opcion escogida.
+	 */
+	public void iniciarPrograma()
+	{
 		
+		while(true)
+		{
+			int opcion = view.darOpciones();
+			if(opcion ==1)
+			{
+				String localidad = view.pedir("localidad");
+				if(localidad == null)
+					iniciarPrograma();
+				else
+				{
+					try {
+						Comparendo buscado = modelo.buscarPrimeroenLocalidad(localidad);
+						view.imprimir(buscado);
+					} 
+					catch (Exception e) 
+					{
+						view.imprimir(e.getMessage());
+					}
+				}
+			}
+			else if(opcion == 2)
+			{
+				Lista<Comparendo> buscados = modelo.darComparendosenFecha(view.pedir("fecha"));
+				for (Comparendo comparendo : buscados) {
+					view.imprimir(comparendo);
+				}
+				view.imprimir("Total copmarendos" + buscados.darTamaño());
+			}
+		}
+	}
 	public void run() 
 	{
 		Scanner lector = new Scanner(System.in);
