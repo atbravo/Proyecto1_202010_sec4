@@ -187,6 +187,26 @@ public class Modelo {
 			throw new Exception(COMPARENDO_NO_ENCONTRADO);
 		return buscado;
 	}
+	/**
+	 * Busca el primer comparendo dada su infraccion. Si no lo encuentra, lanza una excepci
+	 * @param infraccion Infraccion que se desea buscar 
+	 * @return Primer comparendo encontrado con la infraccion dada
+	 * @throws Exception Si no encuentra el comparendo
+	 */
+	public Comparendo buscarPrimeroInfraccion (String infraccion) throws Exception {
+		Comparendo buscado= null;
+		for (int i =0; i <comparendos.darTamaño()&& buscado==null;i++) {
+			if (comparendos.darElementoPosicion(i).darDetalles().darInfraccion().equals(infraccion)) {
+				buscado=comparendos.darElementoPosicion(i);
+			}
+		}
+		if (buscado==null) {
+			throw new Exception(COMPARENDO_NO_ENCONTRADO);
+		}
+			
+		
+		return buscado;
+	}
 	public Comparendo[] copiarComparendos()
 	{
 		Comparendo[] comp = new Comparendo[comparendos.darTamaño()];
@@ -219,4 +239,17 @@ public class Modelo {
 		}
 		return respuesta;
 	}
+
+public Lista<Comparendo> consultarPorInfraccion(String infraccion)
+{
+	Comparendo[] copia= copiarComparendos();
+	Lista<Comparendo> infracciones= new Lista<Comparendo>();
+	for (int i =0; i<comparendos.darTamaño();i++) {
+		if(comparendos.darElementoPosicion(i).darDetalles().darInfraccion().equals(infraccion))
+		 infracciones.agregarElemento(comparendos.darElementoPosicion(i));
+		
+	}
+	//Recordatorio... finalizar para ordenar 
+	return infracciones;
+}
 }

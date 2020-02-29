@@ -29,7 +29,10 @@ public class View<E>
 	    	int respuesta = 0;
 	    	BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 	    	System.out.println("Escoja que opcion quiere realizar:");
-	    	System.out.println("1. Buscar un comparendo en localidad especifica");
+	    	System.out.println("1. Buscar el primer comparendo en la localidad específica");
+	    	System.out.println("2. Consultar los comaprendos registrados en el archivo determinada fecha y hora");
+	    	System.out.println("3. ");
+	    	System.out.println("4. Buscar el primer comparendo según la infracción específica");
 	    	try
 	    	{
 	    		respuesta = Integer.parseInt(bf.readLine());
@@ -41,7 +44,7 @@ public class View<E>
 	    	return respuesta;
 	    }
 	    /**
-	     * Solicita al usuario que ingrese lo que desea buscar los copmarendos, retorna null para cancelar
+	     * Solicita al usuario que ingrese lo que desea buscar de los comparendos, retorna null para cancelar
 	     * @param parametro, lo que se solicitara al usuario
 	     * @return la localidad solicitada o Null si desea cancelar 
 	     */
