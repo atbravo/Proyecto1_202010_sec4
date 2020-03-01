@@ -38,6 +38,7 @@ public class View<E>
 		System.out.println("5.");
 		System.out.println("6.");
 		System.out.println("7. Dar comparendos por infraccion en localidad, entre dos fechas");
+		System.out.println("8. Dar ranking mas comparendos por infraccion");
 		try
 		{
 			respuesta = Integer.parseInt(bf.readLine());

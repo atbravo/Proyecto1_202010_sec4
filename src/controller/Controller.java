@@ -149,6 +149,33 @@ public class Controller {
 					}
 				}
 			}
+			else if(opcion == 8)
+			{
+				String fecha1 = view.pedir("primera fecha (yyyy/MM/dd) ");
+				if (fecha1 == null)
+					iniciarPrograma();
+				else {
+					String fecha2 = view.pedir("segunda fecha (yyyy/MM/dd) ");
+					if (fecha2 == null)
+						iniciarPrograma();
+					else {
+						try
+						{
+							Lista<String[]> lista = modelo.darRankingMasComparendos(fecha1, fecha2);
+							view.imprimir("Ranking de las 3 mayores infracciones del " + fecha1 + " al " + fecha2);
+							view.imprimirFormatoTablaDosColumnas("Infraccion", "#Comparendos");
+							for (String[] e : lista) {
+								view.imprimirFormatoTablaDosColumnas(e[0], e[1]);
+							}
+						}
+						catch(Exception e)
+						{
+							view.imprimir(e.getMessage());
+						}
+					}
+				}
+
+			}
 		}
 	}
 
