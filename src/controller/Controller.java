@@ -73,11 +73,11 @@ public class Controller {
 
 			else if (opcion == 3) {
 
-				String fecha1 = view.pedir("primera fecha");
+				String fecha1 = view.pedir("primera fecha (yyyy/MM/dd");
 				if (fecha1 == null)
 					iniciarPrograma();
 				else {
-					String fecha2 = view.pedir("segunda fecha");
+					String fecha2 = view.pedir("segunda fecha (yyyy/MM/dd");
 					if (fecha2 == null)
 						iniciarPrograma();
 					else {

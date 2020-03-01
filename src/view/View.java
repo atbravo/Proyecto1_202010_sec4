@@ -27,6 +27,7 @@ public class View<E>
 	     */
 	    public int darOpciones()
 	    {
+	    	System.out.println();
 	    	int respuesta = 0;
 	    	BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 	    	System.out.println("Escoja que opcion quiere realizar:");
@@ -40,7 +41,7 @@ public class View<E>
 	    	}
 	    	catch(Exception e)
 	    	{
-	    		darOpciones();
+	    		respuesta = darOpciones();
 	    	}
 	    	return respuesta;
 	    }
