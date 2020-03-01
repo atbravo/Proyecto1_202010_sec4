@@ -239,9 +239,14 @@ public class Modelo {
 		}
 		return respuesta;
 	}
-	public void ordenarPorCodigo(Comparendo[] arreglo)
+	/**
+	 * Ordena el arreglo que llega por codigo de infraccion 
+	 * @param arreglo
+	 */
+	public Comparendo[] ordenarPorCodigo(Comparendo[] arreglo)
 	{
 		Sorting.mergeSortCodigo(arreglo);
+		return arreglo;
 	}
 	public Lista<Comparendo> consultarPorInfraccion(String infraccion)
 	{

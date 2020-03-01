@@ -32,7 +32,7 @@ public class View<E>
 	    	System.out.println("Escoja que opcion quiere realizar:");
 	    	System.out.println("1. Buscar el primer comparendo en la localidad específica");
 	    	System.out.println("2. Consultar los comparendos registrados en el archivo determinada fecha y hora");
-	    	System.out.println("3. ");
+	    	System.out.println("3. Comparativo copmarendos en dos fechas dadas ");
 	    	System.out.println("4. Buscar el primer comparendo según la infracción específica");
 	    	try
 	    	{

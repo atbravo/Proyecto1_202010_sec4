@@ -99,6 +99,7 @@ public class Sorting<T> {
 			else
 				arr[k] = aux[i++];
 		}
+		
 	}
 
 	/**
@@ -205,7 +206,7 @@ public class Sorting<T> {
 		mergeporCodigo(arr, low, hi, mid);
 	}
 	/**
-	 * Ordena por merge pero usando el codigo para comararar
+	 * Ordena por merge pero usando el codigo para compararar
 	 * @param arr
 	 * @param low
 	 * @param hi

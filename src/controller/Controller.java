@@ -57,14 +57,17 @@ public class Controller {
 			}
 			else if(opcion == 2)
 			{
-				Lista<Comparendo> buscados = modelo.darComparendosenFecha(view.pedir("fecha"));
+				Lista<Comparendo> buscados = modelo.darComparendosenFecha(view.pedir("fecha ( yyyy/MM/dd) "));
 				for (Comparendo comparendo : buscados) {
 					view.imprimir(comparendo);
 				}
 				view.imprimir("Total comparendos " + buscados.darTamaño());
 			}
 			else if(opcion==3) {
-
+				
+				String fecha1 = view.pedir("primera fecha");
+				String fecha2 = view.pedir("segunda fecha");
+				
 			}
 			else if(opcion==4) {
 				String infraccion=view.pedir("la infraccion");
