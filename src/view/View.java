@@ -76,6 +76,31 @@ public class View<E>
 	    	System.out.println(cosa);
 	    	System.out.println();
 	    }
+	    /**
+	     * Imprime los parametros en forma de una table de tres columnas
+	     * @param columna1 elemento de la primera tabla
+	     * @param columna2 elemento de la segunda tabla
+	     * @param columna3 elemento de la segunda tabla
+	     */
+	    public void imprimirFormatotabla(String columna1 ,String columna2, String columna3)
+	    {
+	    	System.out.println(columna1 + darEspacio(columna1, 10) + "|" + columna2 + darEspacio(columna2, 10) + "|" + columna3);
+	    }
+	    /**
+	     * Retorna una cadena de espacios con longitud igual a lngdeseada - impresion.lenght(9
+	     * @param impresion cadena a ajustar
+	     * @param longitudDeseada longitud deseada de la nueva cadena
+	     * @return cadena con espacios en blanco
+	     */
+	    private String darEspacio(String impresion, int lngdeseada)
+	    {
+	    	String corrimiento = "";
+	    	for(int i = 0; i < lngdeseada - impresion.length(); i++)
+	    	{
+	    		corrimiento = " " + corrimiento;
+	    	}
+	    	return corrimiento;
+	    }
 		public void printMenu()
 		{
 			System.out.println("1. Crear Arreglo Dinamico de Strings");

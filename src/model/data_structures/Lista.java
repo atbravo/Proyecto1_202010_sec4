@@ -166,7 +166,9 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 
 	protected class IteradorLista implements Iterator<T> {
 		public IteradorLista() {
-			actual = cabeza;
+			Node nuevo = new Node<T>((T) cabeza.darElemento());
+			nuevo.asignarSiguiente(cabeza);
+			actual = nuevo;
 		}
 
 		public boolean hasNext() {

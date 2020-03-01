@@ -201,8 +201,8 @@ public class Sorting<T> {
 		if (low >= hi)
 			return;
 		int mid = (low + hi) / 2;
-		mergeSort(low, mid, arr);
-		mergeSort(mid + 1, hi, arr);
+		mergeSortCodigo(low, mid, arr);
+		mergeSortCodigo(mid + 1, hi, arr);
 		mergeporCodigo(arr, low, hi, mid);
 	}
 	/**

@@ -224,8 +224,16 @@ public class Modelo {
 	 * @param Fecha la fecha solicitada
 	 * @return lista con comparendos en la fecha buscada
 	 */
-	public  Lista<Comparendo> darComparendosenFecha(String fecha)
+	public  Lista<Comparendo> darComparendosenFecha(String fecha) throws Exception
 	{ 
+		try
+		{
+		Date fecha1 = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
+		}
+		catch(Exception e)
+		{
+			throw new Exception("La fecha no está en el formato esperado");
+		}
 		Comparendo[] ordenados = copiarComparendos();
 		Sorting.mergeSort(ordenados);
 		Lista<Comparendo> respuesta = new Lista<Comparendo>();
@@ -242,40 +250,40 @@ public class Modelo {
 		ficticio = null;
 		return respuesta;
 	}
-	public Lista<String[]> crearTablaComparativa(String fecha1, String fecha2)
+	public Lista<String[]> crearTablaComparativa(String fecha1, String fecha2) throws Exception
 	{
 		Lista<Comparendo> lista = darListadosFechas(fecha1, fecha2);
-		Comparendo[] comp = new Comparendo[lista.darTamaño()];
+		Comparendo[] comparendos = new Comparendo[lista.darTamaño()];
 		lista.reiniciarActual();
 		for (int i = 0; i < lista.darTamaño(); i++) {
-			comp[i] = lista.darElementoActual();
+			comparendos[i] = lista.darElementoActual();
 			lista.avanzarActual();
 		}
 		lista = null;
-		Sorting.mergeSortCodigo(comp);
+		Sorting.mergeSortCodigo(comparendos);
 		Lista<String[]> respuesta = new Lista<>();
 		int i = 0;
-		while(i < comp.length)
+		while(i < comparendos.length)
 		{
-			String actual = comp[i].darDetalles().darInfraccion();
+			String actual = comparendos[i].darDetalles().darInfraccion();
 			int enfecha1 = 0;
 			int enfecha2 = 0;
-			while(actual.equals(comp[i].darDetalles().darInfraccion()))
+			while( i < comparendos.length && actual.equals(comparendos[i].darDetalles().darInfraccion()))
 			{
-				if(comp[i].darDetalles().darfecha().equals(fecha1))
+				if(comparendos[i].darDetalles().darfecha().equals(fecha1))
 					enfecha1++;
 				else
 					enfecha2++;
 				i++;
 			}
-			String[] elemento = {actual, "" + enfecha1, "" + enfecha2};
+			String[] elemento = {actual, ""  + enfecha1, "" + enfecha2};
 			respuesta.agregarAlFinal(elemento);
 		}
 		return respuesta;
 		
 	}
 
-	public Lista<Comparendo> darListadosFechas(String fecha1, String fecha2)
+	public Lista<Comparendo> darListadosFechas(String fecha1, String fecha2) throws Exception
 	{
 		String fechaMayor = darFechaMayor(fecha1, fecha2);
 		String fechaMenor = fechaMayor.equals(fecha1)? fecha2: fecha1;
@@ -296,7 +304,7 @@ public class Modelo {
 		ficticio2 = null;
 		return respuesta;
 	}
-	public String darFechaMayor(String fecha1, String fecha2)
+	public String darFechaMayor(String fecha1, String fecha2) throws Exception
 	{
 		String mayor = fecha1;
 		String menor = fecha2;
@@ -307,7 +315,9 @@ public class Modelo {
 				mayor = fecha2;
 				menor = fecha1;
 			}
-		} catch (ParseException e) {}
+		} catch (ParseException e) {
+			throw new Exception("La fecha no está en el formato esperado");
+		}
 		return mayor;	
 	}
 	public Lista<Comparendo> consultarPorInfraccion(String infraccion)

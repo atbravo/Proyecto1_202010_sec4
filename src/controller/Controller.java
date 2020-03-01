@@ -11,98 +11,124 @@ import view.View;
 
 public class Controller {
 
-	/* Instancia del Modelo*/
+	/* Instancia del Modelo */
 	private Modelo modelo;
 
-	/* Instancia de la Vista*/
+	/* Instancia de la Vista */
 	private View view;
 
 	/**
 	 * Crear la vista y el modelo del proyecto
-	 * @param capacidad tamaNo inicial del arreglo
+	 * 
+	 * @param capacidad
+	 *            tamaNo inicial del arreglo
 	 */
-	public Controller ()
-	{
+	public Controller() {
 		view = new View();
 		modelo = new Modelo();
-		view.imprimirResultadosCarga(modelo.darTamano(), modelo.get(0), modelo.get(modelo.darTamano()-1), modelo.darZonaMinimax());
+		view.imprimirResultadosCarga(modelo.darTamano(), modelo.get(0), modelo.get(modelo.darTamano() - 1),
+				modelo.darZonaMinimax());
 		iniciarPrograma();
 	}
-	/**
-	 * Este metodo llama a la vista para que despliegue el menu de opciones al usuario y
-	 * ejecuta la opcion escogida.
-	 */
-	public void iniciarPrograma()
-	{
 
-		while(true)
-		{
+	/**
+	 * Este metodo llama a la vista para que despliegue el menu de opciones al
+	 * usuario y ejecuta la opcion escogida.
+	 */
+	public void iniciarPrograma() {
+
+		while (true) {
 			int opcion = view.darOpciones();
-			if(opcion ==1)
-			{
+			if (opcion == 1) {
 				String localidad = view.pedir("localidad");
-				if(localidad == null)
+				if (localidad == null)
 					iniciarPrograma();
-				else
-				{
+				else {
 					try {
 						Comparendo buscado = modelo.buscarPrimeroenLocalidad(localidad);
 						view.imprimir(buscado);
-					} 
-					catch (Exception e) 
+					} catch (Exception e) {
+						view.imprimir(e.getMessage());
+					}
+				}
+			} else if (opcion == 2) {
+				String fecha = view.pedir("fecha (yyyy/MM/dd) ");
+				if (fecha == null) {
+					iniciarPrograma();
+				} else {
+					try
+					{
+						Lista<Comparendo> buscados = modelo.darComparendosenFecha(fecha);
+						for (Comparendo comparendo : buscados) {
+							view.imprimir(comparendo);
+						}
+						view.imprimir("Total comparendos " + buscados.darTamaño());
+					}
+					catch(Exception e)
 					{
 						view.imprimir(e.getMessage());
 					}
 				}
 			}
-			else if(opcion == 2)
-			{
-				Lista<Comparendo> buscados = modelo.darComparendosenFecha(view.pedir("fecha ( yyyy/MM/dd) "));
-				for (Comparendo comparendo : buscados) {
-					view.imprimir(comparendo);
-				}
-				view.imprimir("Total comparendos " + buscados.darTamaño());
-			}
-			else if(opcion==3) {
-				
+
+			else if (opcion == 3) {
+
 				String fecha1 = view.pedir("primera fecha");
-				String fecha2 = view.pedir("segunda fecha");
-				Lista<String[]> lista = modelo.crearTablaComparativa(fecha1, fecha2);
-				
-			}
-			else if(opcion==4) {
-				String infraccion=view.pedir("la infraccion");
-				if (infraccion!=null) {
+				if (fecha1 == null)
+					iniciarPrograma();
+				else {
+					String fecha2 = view.pedir("segunda fecha");
+					if (fecha2 == null)
+						iniciarPrograma();
+					else {
+						try
+						{
+							Lista<String[]> lista = modelo.crearTablaComparativa(fecha1, fecha2);
+							view.imprimir("Comparación de comparendos por Infracción en dos fechas:");
+							view.imprimirFormatotabla("Infraccion", fecha1, fecha2);
+							for (String[] e : lista) {
+								view.imprimirFormatotabla(e[0], e[1], e[2]);
+							}
+						}
+						catch(Exception e)
+						{
+							view.imprimir(e.getMessage());
+						}
+					}
+				}
+
+			} else if (opcion == 4) {
+				String infraccion = view.pedir("la infraccion");
+				if (infraccion != null) {
 					try {
 						view.imprimir(modelo.buscarPrimeroInfraccion(infraccion));
 					} catch (Exception e) {
-						view.imprimir(e.getMessage());}
-				}
-					else
-						iniciarPrograma();
+						view.imprimir(e.getMessage());
+					}
+				} else
+					iniciarPrograma();
 
-				}
 			}
 		}
-	
-	public void run() 
-	{
+	}
+
+	public void run() {
 		Scanner lector = new Scanner(System.in);
 		boolean fin = false;
 		String dato = "";
 		String respuesta = "";
 
-		while( !fin ){
+		while (!fin) {
 			view.printMenu();
 
 			int option = lector.nextInt();
-			switch(option){
+			switch (option) {
 			case 1:
 				view.printMessage("--------- \nCrear Arreglo \nDar capacidad inicial del arreglo: ");
 				int capacidad = lector.nextInt();
-				modelo = new Modelo(capacidad); 
+				modelo = new Modelo(capacidad);
 				view.printMessage("Arreglo Dinamico creado");
-				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
+				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");
 				break;
 
 			case 2:
@@ -110,56 +136,50 @@ public class Controller {
 				dato = lector.next();
 				modelo.agregar(dato);
 				view.printMessage("Dato agregado");
-				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
+				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");
 				break;
 
 			case 3:
 				view.printMessage("--------- \nDar cadena (simple) a buscar: ");
 				dato = lector.next();
 				respuesta = modelo.buscar(dato);
-				if ( respuesta != null)
-				{
-					view.printMessage("Dato encontrado: "+ respuesta);
-				}
-				else
-				{
+				if (respuesta != null) {
+					view.printMessage("Dato encontrado: " + respuesta);
+				} else {
 					view.printMessage("Dato NO encontrado");
 				}
-				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
+				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");
 				break;
 
 			case 4:
 				view.printMessage("--------- \nDar cadena (simple) a eliminar: ");
 				dato = lector.next();
 				respuesta = modelo.eliminar(dato);
-				if ( respuesta != null)
-				{
-					view.printMessage("Dato eliminado "+ respuesta);
+				if (respuesta != null) {
+					view.printMessage("Dato eliminado " + respuesta);
+				} else {
+					view.printMessage("Dato NO eliminado");
 				}
-				else
-				{
-					view.printMessage("Dato NO eliminado");							
-				}
-				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
+				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");
 				break;
 
-			case 5: 
+			case 5:
 				view.printMessage("--------- \nContenido del Arreglo: ");
 				view.printModelo(modelo);
-				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
-				break;	
+				view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");
+				break;
 
-			case 6: 
-				view.printMessage("--------- \n Hasta pronto !! \n---------"); 
+			case 6:
+				view.printMessage("--------- \n Hasta pronto !! \n---------");
 				lector.close();
 				fin = true;
-				break;	
+				break;
 
-			default: 
+			default:
 				view.printMessage("--------- \n Opcion Invalida !! \n---------");
 				break;
 			}
 		}
 
-	}	
+	}
 }
