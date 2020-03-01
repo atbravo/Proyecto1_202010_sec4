@@ -12,6 +12,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 import model.data_structures.ArregloDinamico;
 import model.data_structures.IArregloDinamico;
@@ -98,7 +99,7 @@ public class Modelo {
 	 */
 	public void cargar() {
 		try {
-			BufferedReader bf = new BufferedReader(new FileReader(RUTA));
+			JsonReader bf = new JsonReader(new FileReader(RUTA));
 			JsonElement element = JsonParser.parseReader(bf);
 			if (element.isJsonObject()) {
 				JsonObject admin = element.getAsJsonObject();
