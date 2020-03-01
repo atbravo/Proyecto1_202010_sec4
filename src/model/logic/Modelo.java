@@ -196,10 +196,12 @@ public class Modelo {
 	 * @throws Exception Si no encuentra el comparendo
 	 */
 	public Comparendo buscarPrimeroInfraccion (String infraccion) throws Exception {
+		comparendos.reiniciarActual();
 		Comparendo buscado= null;
 		for (int i =0; i <comparendos.darTamaño()&& buscado==null;i++) {
-			if (comparendos.darElementoPosicion(i).darDetalles().darInfraccion().equals(infraccion)) {
-				buscado=comparendos.darElementoPosicion(i);
+			if (infraccion.equalsIgnoreCase(comparendos.darElementoActual().darDetalles().darInfraccion())) {
+				buscado=comparendos.darElementoActual();
+			comparendos.avanzarActual();
 			}
 		}
 		if (buscado==null) {
@@ -228,7 +230,7 @@ public class Modelo {
 	{ 
 		try
 		{
-		Date fecha1 = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
+			Date fecha1 = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
 		}
 		catch(Exception e)
 		{
@@ -248,11 +250,23 @@ public class Modelo {
 				seguir = false;
 		}
 		ficticio = null;
+		if(respuesta.darTamaño() == 0)
+		{
+			throw new Exception(COMPARENDO_NO_ENCONTRADO);
+		}
 		return respuesta;
 	}
+	/**
+	 * Retorna una lista con la cantidad de comparendos por infraccion (ordenados alfabeticamente) EN dos fechas dadas
+	 * cada elemento de la lista contiene un arreglo asi: {Infraccion, comparendos en fecha1, comparendos en fecha2}
+	 * @param fecha1 la primera fecha a buscar
+	 * @param fecha2 la segunda fecah a buscar
+	 * @return lista con comparendos por infraccion en fechas dadas
+	 * @throws Exception si las fechas no estan en el  formato esperado
+	 */
 	public Lista<String[]> crearTablaComparativa(String fecha1, String fecha2) throws Exception
 	{
-		Lista<Comparendo> lista = darListadosFechas(fecha1, fecha2);
+		Lista<Comparendo> lista = darListaEnDosFechas(fecha1, fecha2);
 		Comparendo[] comparendos = new Comparendo[lista.darTamaño()];
 		lista.reiniciarActual();
 		for (int i = 0; i < lista.darTamaño(); i++) {
@@ -279,11 +293,21 @@ public class Modelo {
 			String[] elemento = {actual, ""  + enfecha1, "" + enfecha2};
 			respuesta.agregarAlFinal(elemento);
 		}
+		if(respuesta.darTamaño() == 0)
+		{
+			throw new Exception(COMPARENDO_NO_ENCONTRADO);
+		}
 		return respuesta;
-		
-	}
 
-	public Lista<Comparendo> darListadosFechas(String fecha1, String fecha2) throws Exception
+	}
+	/**
+	 * Retorna una lista con todos los comparendos EN dos fechas especificadas
+	 * @param fecha1 primera fecha buscada
+	 * @param fecha2 segunda fecha buscada
+	 * @return lista con comparendos buscados
+	 * @throws Exception si las fechas no estan en el formato esperado
+	 */
+	public Lista<Comparendo> darListaEnDosFechas(String fecha1, String fecha2) throws Exception
 	{
 		String fechaMayor = darFechaMayor(fecha1, fecha2);
 		String fechaMenor = fechaMayor.equals(fecha1)? fecha2: fecha1;
@@ -291,19 +315,95 @@ public class Modelo {
 		Sorting.mergeSort(ordenados);
 		Lista<Comparendo> respuesta = new Lista<Comparendo>();
 		boolean seguir = true;
-		Comparendo ficticio1 = new Comparendo("", "", 0, 0, 0, 0, fechaMenor, "", "", "", "", "", "");
-		Comparendo ficticio2 = new Comparendo("", "", 0, 0, 0, 0, fechaMayor, "", "", "", "", "", "");
+		Comparendo ficticioMenor = new Comparendo("", "", 0, 0, 0, 0, fechaMenor, "", "", "", "", "", "");
+		Comparendo ficticioMayor = new Comparendo("", "", 0, 0, 0, 0, fechaMayor, "", "", "", "", "", "");
 		for(int i = 0; i < ordenados.length && seguir; i++)
 		{
-			if(ficticio1.compareFecha(ordenados[i]) == 0 || ficticio2.compareFecha(ordenados[i]) == 0)
+			if(ficticioMenor.compareFecha(ordenados[i]) == 0 || ficticioMayor.compareFecha(ordenados[i]) == 0)
 				respuesta.agregarAlFinal(ordenados[i]);
-			else if(ficticio2.compareFecha(ordenados[i]) < 0)
+			else if(ficticioMayor.compareFecha(ordenados[i]) < 0)
 				seguir = false;
 		}
-		ficticio1 = null;
-		ficticio2 = null;
+		ficticioMenor = null;
+		ficticioMayor = null;
+		return respuesta;
+	}	
+	/**
+	 * retorna una lista con la cantidad de comparendos por infraccion listados en la localidad y ENTRE las fechas buscadas
+	 * @param fecha1 primera fecha
+	 * @param fecha2 segunda fecha
+	 * @param localidad localidad buscada
+	 * @return lista con comparendos por infraccion en localida y ENTRE las fechas
+	 * @throws Exception
+	 */
+	public Lista<String[]> crearTablaLocalidadFechas(String fecha1, String fecha2, String localidad) throws Exception
+	{
+		Lista<Comparendo> lista = darListaEntreDosFechasconLocalidad(fecha1, fecha2, localidad);
+		Comparendo[] comparendos = new Comparendo[lista.darTamaño()];
+		lista.reiniciarActual();
+		for (int i = 0; i < lista.darTamaño(); i++) {
+			comparendos[i] = lista.darElementoActual();
+			lista.avanzarActual();
+		}
+		lista = null;
+		Sorting.mergeSortCodigo(comparendos);
+		Lista<String[]> respuesta = new Lista<>();
+		int i = 0;
+		while(i < comparendos.length)
+		{
+			String actual = comparendos[i].darDetalles().darInfraccion();
+			int cantidad = 0;
+			while( i < comparendos.length && actual.equals(comparendos[i].darDetalles().darInfraccion()))
+			{
+				cantidad++;
+				i++;
+			}
+			String[] elemento = {actual, ""  + cantidad};
+			respuesta.agregarAlFinal(elemento);
+		}
+		if(respuesta.darTamaño() == 0)
+		{
+			throw new Exception(COMPARENDO_NO_ENCONTRADO);
+		}
+		return respuesta;
+
+	}
+	/**
+	 * Retorna una lista con todos los comparendos ENTRE dos fechas especificadas y en la localidad solicitada
+	 * @param fecha1 primera fecha buscada
+	 * @param fecha2 segunda fecha buscada
+	 * @param localidad la localidad buscada
+	 * @return lista con comparendos buscados
+	 * @throws Exception si las fechas no estan en el formato esperado
+	 */
+	public Lista<Comparendo> darListaEntreDosFechasconLocalidad(String fecha1, String fecha2, String localidad) throws Exception
+	{
+		String fechaMayor = darFechaMayor(fecha1, fecha2);
+		String fechaMenor = fechaMayor.equals(fecha1)? fecha2: fecha1;
+		Comparendo[] ordenados = copiarComparendos();
+		Sorting.mergeSort(ordenados);
+		Lista<Comparendo> respuesta = new Lista<Comparendo>();
+		boolean seguir = true;
+		Comparendo ficticioMenor = new Comparendo("", "", 0, 0, 0, 0, fechaMenor, "", "", "", "", "", "");
+		Comparendo ficticioMayor = new Comparendo("", "", 0, 0, 0, 0, fechaMayor, "", "", "", "", "", "");
+		for(int i = 0; i < ordenados.length && seguir; i++)
+		{
+			if(ficticioMenor.compareFecha(ordenados[i]) <= 0 && ficticioMayor.compareFecha(ordenados[i]) >= 0 && localidad.equalsIgnoreCase(ordenados[i].darDetalles().darLocalidad()))
+				respuesta.agregarAlFinal(ordenados[i]);
+			else if(ficticioMayor.compareFecha(ordenados[i]) < 0)
+				seguir = false;
+		}
+		ficticioMenor = null;
+		ficticioMayor = null;
 		return respuesta;
 	}
+	/**
+	 * Retorna la mayor de las fechas que entran por parametro
+	 * @param fecha1 primera fecha
+	 * @param fecha2 segunda fecha
+	 * @return mayor fecha
+	 * @throws Exception si alguna no esta en formato esperado
+	 */
 	public String darFechaMayor(String fecha1, String fecha2) throws Exception
 	{
 		String mayor = fecha1;

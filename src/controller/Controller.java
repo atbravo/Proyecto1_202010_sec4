@@ -73,11 +73,11 @@ public class Controller {
 
 			else if (opcion == 3) {
 
-				String fecha1 = view.pedir("primera fecha (yyyy/MM/dd");
+				String fecha1 = view.pedir("primera fecha (yyyy/MM/dd) ");
 				if (fecha1 == null)
 					iniciarPrograma();
 				else {
-					String fecha2 = view.pedir("segunda fecha (yyyy/MM/dd");
+					String fecha2 = view.pedir("segunda fecha (yyyy/MM/dd) ");
 					if (fecha2 == null)
 						iniciarPrograma();
 					else {
@@ -85,9 +85,9 @@ public class Controller {
 						{
 							Lista<String[]> lista = modelo.crearTablaComparativa(fecha1, fecha2);
 							view.imprimir("Comparación de comparendos por Infracción en dos fechas:");
-							view.imprimirFormatotabla("Infraccion", fecha1, fecha2);
+							view.imprimirFormatotablaTresColumnas("Infraccion", fecha1, fecha2);
 							for (String[] e : lista) {
-								view.imprimirFormatotabla(e[0], e[1], e[2]);
+								view.imprimirFormatotablaTresColumnas(e[0], e[1], e[2]);
 							}
 						}
 						catch(Exception e)
@@ -108,6 +108,46 @@ public class Controller {
 				} else
 					iniciarPrograma();
 
+			}
+			else if(opcion == 5)
+			{
+
+			}
+			else if(opcion == 6)
+			{
+
+			}
+			else if(opcion == 7)
+			{
+				String fecha1 = view.pedir("primera fecha (yyyy/MM/dd)");
+				if (fecha1 == null)
+					iniciarPrograma();
+				else {
+					String fecha2 = view.pedir("segunda fecha (yyyy/MM/dd)");
+					if (fecha2 == null)
+						iniciarPrograma();
+					else {
+						String localidad = view.pedir("localidad ");
+						if(localidad == null)
+							iniciarPrograma();
+						else
+						{
+							try
+							{
+								Lista<String[]> lista = modelo.crearTablaLocalidadFechas(fecha1, fecha2, localidad);
+								view.imprimir("Comparación de comparendos en " + localidad +" del " + fecha1 + " al " + fecha2);
+								view.imprimirFormatoTablaDosColumnas("Infraccion", "#Comparendos");
+								for (String[] e : lista) {
+									view.imprimirFormatoTablaDosColumnas(e[0], e[1]);
+								}
+							}
+							catch(Exception e)
+							{
+								view.imprimir(e.getMessage());
+							}
+						}
+					}
+				}
 			}
 		}
 	}
