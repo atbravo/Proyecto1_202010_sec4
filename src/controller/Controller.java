@@ -67,6 +67,7 @@ public class Controller {
 				
 				String fecha1 = view.pedir("primera fecha");
 				String fecha2 = view.pedir("segunda fecha");
+				Lista<String[]> lista = modelo.crearTablaComparativa(fecha1, fecha2);
 				
 			}
 			else if(opcion==4) {

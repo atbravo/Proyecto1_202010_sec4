@@ -2,7 +2,9 @@ package model.logic;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -237,16 +239,76 @@ public class Modelo {
 			else if(iguales < 0)
 				seguir = false;
 		}
+		ficticio = null;
 		return respuesta;
 	}
-	/**
-	 * Ordena el arreglo que llega por codigo de infraccion 
-	 * @param arreglo
-	 */
-	public Comparendo[] ordenarPorCodigo(Comparendo[] arreglo)
+	public Lista<String[]> crearTablaComparativa(String fecha1, String fecha2)
 	{
-		Sorting.mergeSortCodigo(arreglo);
-		return arreglo;
+		Lista<Comparendo> lista = darListadosFechas(fecha1, fecha2);
+		Comparendo[] comp = new Comparendo[lista.darTamaño()];
+		lista.reiniciarActual();
+		for (int i = 0; i < lista.darTamaño(); i++) {
+			comp[i] = lista.darElementoActual();
+			lista.avanzarActual();
+		}
+		lista = null;
+		Sorting.mergeSortCodigo(comp);
+		Lista<String[]> respuesta = new Lista<>();
+		int i = 0;
+		while(i < comp.length)
+		{
+			String actual = comp[i].darDetalles().darInfraccion();
+			int enfecha1 = 0;
+			int enfecha2 = 0;
+			while(actual.equals(comp[i].darDetalles().darInfraccion()))
+			{
+				if(comp[i].darDetalles().darfecha().equals(fecha1))
+					enfecha1++;
+				else
+					enfecha2++;
+				i++;
+			}
+			String[] elemento = {actual, "" + enfecha1, "" + enfecha2};
+			respuesta.agregarAlFinal(elemento);
+		}
+		return respuesta;
+		
+	}
+
+	public Lista<Comparendo> darListadosFechas(String fecha1, String fecha2)
+	{
+		String fechaMayor = darFechaMayor(fecha1, fecha2);
+		String fechaMenor = fechaMayor.equals(fecha1)? fecha2: fecha1;
+		Comparendo[] ordenados = copiarComparendos();
+		Sorting.mergeSort(ordenados);
+		Lista<Comparendo> respuesta = new Lista<Comparendo>();
+		boolean seguir = true;
+		Comparendo ficticio1 = new Comparendo("", "", 0, 0, 0, 0, fechaMenor, "", "", "", "", "", "");
+		Comparendo ficticio2 = new Comparendo("", "", 0, 0, 0, 0, fechaMayor, "", "", "", "", "", "");
+		for(int i = 0; i < ordenados.length && seguir; i++)
+		{
+			if(ficticio1.compareFecha(ordenados[i]) == 0 || ficticio2.compareFecha(ordenados[i]) == 0)
+				respuesta.agregarAlFinal(ordenados[i]);
+			else if(ficticio2.compareFecha(ordenados[i]) < 0)
+				seguir = false;
+		}
+		ficticio1 = null;
+		ficticio2 = null;
+		return respuesta;
+	}
+	public String darFechaMayor(String fecha1, String fecha2)
+	{
+		String mayor = fecha1;
+		String menor = fecha2;
+		try {
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd");
+			if(sf.parse(fecha1).compareTo(sf.parse(fecha2)) < 0)
+			{
+				mayor = fecha2;
+				menor = fecha1;
+			}
+		} catch (ParseException e) {}
+		return mayor;	
 	}
 	public Lista<Comparendo> consultarPorInfraccion(String infraccion)
 	{
