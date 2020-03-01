@@ -61,7 +61,7 @@ public class Controller {
 				for (Comparendo comparendo : buscados) {
 					view.imprimir(comparendo);
 				}
-				view.imprimir("Total copmarendos" + buscados.darTamaño());
+				view.imprimir("Total comparendos " + buscados.darTamaño());
 			}
 			else if(opcion==3) {
 

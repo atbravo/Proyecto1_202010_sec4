@@ -180,5 +180,53 @@ public class Sorting<T> {
 		arr[a] = arr[b];
 		arr[b] = E;
 	}
-
+	/**
+	 * Ordena por merge pero usando el codigo para comararar
+	 * @param principal
+	 */
+	public static void mergeSortCodigo(Comparendo[] principal)
+	{
+		// Tomado de las presentaciones en sicua (Slides clase 9)
+		aux = new Comparable[principal.length];
+		mergeSortCodigo(0, principal.length - 1, principal);
+	}
+	/**
+	 * Ordena por merge pero usando el codigo para comararar
+	 * @param low
+	 * @param hi
+	 * @param arr
+	 */
+	public static void mergeSortCodigo(int low, int hi, Comparendo[] arr) {
+		if (low >= hi)
+			return;
+		int mid = (low + hi) / 2;
+		mergeSort(low, mid, arr);
+		mergeSort(mid + 1, hi, arr);
+		mergeporCodigo(arr, low, hi, mid);
+	}
+	/**
+	 * Ordena por merge pero usando el codigo para comararar
+	 * @param arr
+	 * @param low
+	 * @param hi
+	 * @param mid
+	 */
+	public static void mergeporCodigo(Comparendo[] arr, int low, int hi, int mid) {
+		// Tomado de las presentaciones en sicua (Slides clase 9)
+		int i = low;
+		int j = mid + 1;
+		for (int k = low; k <= hi; k++) {
+			aux[k] = arr[k];
+		}
+		for (int k = low; k <= hi; k++) {
+			if (i > mid)
+				arr[k] = (Comparendo) aux[j++];
+			else if (j > hi)
+				arr[k] = (Comparendo) aux[i++];
+			else if ((((Comparendo) aux[j]).compareCodigo((Comparendo) aux[i])) <= 0)
+				arr[k] = (Comparendo) aux[j++];
+			else
+				arr[k] = (Comparendo) aux[i++];
+		}
+	}
 }

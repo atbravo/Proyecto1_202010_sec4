@@ -33,6 +33,25 @@ public class Comparendo implements Comparable<Comparendo> {
 		return string + string2;
 	}
 
+	/**
+	 * Compara por fecha SOLO fecha
+	 */
+	public int compareFecha(Comparendo o)
+	{
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd");
+		int respuesta = 0;
+		try {
+			Date f1 = sf.parse(properties.darfecha());
+			Date f2 = sf.parse(o.darDetalles().darfecha());
+			respuesta = (f1.compareTo(f2));
+		} catch (ParseException e) {
+		}
+		return respuesta;
+	}
+	public int compareCodigo(Comparendo o)
+	{
+		return properties.darInfraccion().compareTo(o.darDetalles().darInfraccion());
+	}
 	@Override
 	/**
 	 * Compara el comparendo actual con el que llega por parametro

@@ -3,6 +3,7 @@ package view;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import model.data_structures.Lista;
 import model.logic.Comparendo;
 import model.logic.Modelo;
 
@@ -30,7 +31,7 @@ public class View<E>
 	    	BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 	    	System.out.println("Escoja que opcion quiere realizar:");
 	    	System.out.println("1. Buscar el primer comparendo en la localidad específica");
-	    	System.out.println("2. Consultar los comaprendos registrados en el archivo determinada fecha y hora");
+	    	System.out.println("2. Consultar los comparendos registrados en el archivo determinada fecha y hora");
 	    	System.out.println("3. ");
 	    	System.out.println("4. Buscar el primer comparendo según la infracción específica");
 	    	try
@@ -71,7 +72,9 @@ public class View<E>
 	     */
 	    public void imprimir(Object cosa)
 	    {
+	    	System.out.println();
 	    	System.out.println(cosa);
+	    	System.out.println();
 	    }
 		public void printMenu()
 		{

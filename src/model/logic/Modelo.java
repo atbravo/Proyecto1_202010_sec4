@@ -22,7 +22,7 @@ import model.data_structures.Lista;
 public class Modelo {
 
 
-	public final String RUTA = "./data/comparendos_dei_2018_small.geojson";
+	public final String RUTA = "./data/comparendos_dei_2018.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 
 	/**
@@ -140,7 +140,7 @@ public class Modelo {
 	}
 
 
-	
+
 	/**
 	 * retorna la zona minimax de los comparendos
 	 * @return la zona minimax de los comparendos en el siguiente orden: minLat, minLong, maxLat, MaxLong
@@ -158,7 +158,7 @@ public class Modelo {
 				minLatitud = actual.darUbicacion().darLatitud();
 			else if (actual.darUbicacion().darLatitud() > maxLatitud)
 				maxLatitud = actual.darUbicacion().darLatitud();
-			
+
 			if(actual.darUbicacion().darLongitud() < minLongitud)
 				minLongitud = actual.darUbicacion().darLongitud();
 			else if(actual.darUbicacion().darLongitud() > maxLongitud)
@@ -203,8 +203,8 @@ public class Modelo {
 		if (buscado==null) {
 			throw new Exception(COMPARENDO_NO_ENCONTRADO);
 		}
-			
-		
+
+
 		return buscado;
 	}
 	public Comparendo[] copiarComparendos()
@@ -228,28 +228,31 @@ public class Modelo {
 		Sorting.mergeSort(ordenados);
 		Lista<Comparendo> respuesta = new Lista<Comparendo>();
 		boolean seguir = true;
-		Comparendo ficticio = new Comparendo("", "",0,0,0,0, "",fecha,"", "","","","");
+		Comparendo ficticio = new Comparendo("", "", 0, 0, 0, 0, fecha, "", "", "", "", "", "");
 		for(int i = 0; i < ordenados.length && seguir; i++)
 		{
-			int iguales = ficticio.compareTo(ordenados[i]);
-			if(i == 0)
+			int iguales = ficticio.compareFecha(ordenados[i]);
+			if(iguales == 0)
 				respuesta.agregarAlFinal(ordenados[i]);
-			else if(i < 0)
+			else if(iguales < 0)
 				seguir = false;
 		}
 		return respuesta;
 	}
-
-public Lista<Comparendo> consultarPorInfraccion(String infraccion)
-{
-	Comparendo[] copia= copiarComparendos();
-	Lista<Comparendo> infracciones= new Lista<Comparendo>();
-	for (int i =0; i<comparendos.darTamaño();i++) {
-		if(comparendos.darElementoPosicion(i).darDetalles().darInfraccion().equals(infraccion))
-		 infracciones.agregarElemento(comparendos.darElementoPosicion(i));
-		
+	public void ordenarPorCodigo(Comparendo[] arreglo)
+	{
+		Sorting.mergeSortCodigo(arreglo);
 	}
-	//Recordatorio... finalizar para ordenar 
-	return infracciones;
-}
+	public Lista<Comparendo> consultarPorInfraccion(String infraccion)
+	{
+		Comparendo[] copia= copiarComparendos();
+		Lista<Comparendo> infracciones= new Lista<Comparendo>();
+		for (int i =0; i<comparendos.darTamaño();i++) {
+			if(comparendos.darElementoPosicion(i).darDetalles().darInfraccion().equals(infraccion))
+				infracciones.agregarElemento(comparendos.darElementoPosicion(i));
+
+		}
+		//Recordatorio... finalizar para ordenar 
+		return infracciones;
+	}
 }

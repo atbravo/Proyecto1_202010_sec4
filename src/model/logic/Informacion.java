@@ -51,6 +51,10 @@ public class Informacion {
 	{
 		return LOCALIDAD;
 	}
+	public String darDescripcion()
+	{
+		return DES_INFRACCION;
+	}
 	public String toString()
 	{
 		return "Id: " + darID() + "\n" + "Fecha:" + darfecha() + "\n" + "Detencion: " + MEDIO_DETE
