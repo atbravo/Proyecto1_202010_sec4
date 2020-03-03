@@ -589,8 +589,9 @@ public class Modelo {
 					rta.agregarElemento(ordenados[j].darDetalles().darInfraccion() + "-" + particular + "-" + publico);
 				}
 			}
-			return rta; 
+			
 		}
+		return rta; 
 
 	}
 	/**
