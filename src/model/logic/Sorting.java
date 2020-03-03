@@ -182,7 +182,7 @@ public class Sorting<T> {
 		arr[b] = E;
 	}
 	/**
-	 * Ordena por merge pero usando el codigo para comararar
+	 * Ordena por merge pero usando el codigo para comparar
 	 * @param principal
 	 */
 	public static void mergeSortCodigo(Comparendo[] principal)
@@ -230,4 +230,57 @@ public class Sorting<T> {
 				arr[k] = (Comparendo) aux[i++];
 		}
 	}
+	
+	/**
+	 * Ordena por merge pero usando la localidad para comparar
+	 * @param principal
+	 */
+	public static void mergeSortLocalidad(Comparendo[] principal)
+	{
+		// Tomado de las presentaciones en sicua (Slides clase 9)
+		aux = new Comparable[principal.length];
+		mergeSortLocalidad(0, principal.length - 1, principal);
+	}
+	/**
+	 * Ordena por merge pero usando la localidad para comararar
+	 * @param low
+	 * @param hi
+	 * @param arr
+	 */
+	public static void mergeSortLocalidad(int low, int hi, Comparendo[] arr) {
+		if (low >= hi)
+			return;
+		int mid = (low + hi) / 2;
+		mergeSortLocalidad(low, mid, arr);
+		mergeSortLocalidad(mid + 1, hi, arr);
+		mergeporLocalidad(arr, low, hi, mid);
+	}
+	/**
+	 * Ordena por merge pero usando la localidad para compararar
+	 * @param arr
+	 * @param low
+	 * @param hi
+	 * @param mid
+	 */
+	public static void mergeporLocalidad(Comparendo[] arr, int low, int hi, int mid) {
+		// Tomado de las presentaciones en sicua (Slides clase 9)
+		int i = low;
+		int j = mid + 1;
+		for (int k = low; k <= hi; k++) {
+			aux[k] = arr[k];
+		}
+		for (int k = low; k <= hi; k++) {
+			if (i > mid)
+				arr[k] = (Comparendo) aux[j++];
+			else if (j > hi)
+				arr[k] = (Comparendo) aux[i++];
+			else if ((((Comparendo) aux[j]).compareLocalidad((Comparendo) aux[i])) <= 0)
+				arr[k] = (Comparendo) aux[j++];
+			else
+				arr[k] = (Comparendo) aux[i++];
+		}
+	}
+	
+	
+	
 }

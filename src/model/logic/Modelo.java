@@ -17,6 +17,7 @@ import com.google.gson.stream.JsonReader;
 import model.data_structures.ArregloDinamico;
 import model.data_structures.IArregloDinamico;
 import model.data_structures.Lista;
+import java.lang.Math;
 
 /**
  * Definicion del modelo del mundo
@@ -204,7 +205,7 @@ public class Modelo {
 
 	/**
 	 * Busca el primer comparendo dada su infraccion. Si no lo encuentra, lanza
-	 * una excepci
+	 * una excepción
 	 * 
 	 * @param infraccion
 	 *            Infraccion que se desea buscar
@@ -221,10 +222,8 @@ public class Modelo {
 				comparendos.avanzarActual();
 			}
 		}
-		if (buscado == null) {
+		if (buscado == null) 
 			throw new Exception(COMPARENDO_NO_ENCONTRADO);
-		}
-
 		return buscado;
 	}
 
@@ -546,16 +545,99 @@ public class Modelo {
 		}
 		return mayor;
 	}
+	/**
+	 * Da la lista con los comparendos que tengan la misma infraccion que entra por parámetro
+	 * @param infraccion Infraccion dada por el usuario 
+	 * @return Lista ordenada por fecha de manera ascendente con los comparendos que tengan dicho tipo de infraccion.
+	 */
+	public Lista<Comparendo> consultarPorInfraccion(String infraccion)
+	{
+		Comparendo[] copia= copiarComparendos();
+		Sorting.mergeSort(copia);
+		Lista<Comparendo> infracciones= new Lista<Comparendo>();
+		for (int i =0; i<copia.length;i++) {
 
-	public Lista<Comparendo> consultarPorInfraccion(String infraccion) {
-		Comparendo[] copia = copiarComparendos();
-		Lista<Comparendo> infracciones = new Lista<Comparendo>();
-		for (int i = 0; i < comparendos.darTamaño(); i++) {
-			if (comparendos.darElementoPosicion(i).darDetalles().darInfraccion().equals(infraccion))
-				infracciones.agregarElemento(comparendos.darElementoPosicion(i));
+			if(copia[i].darDetalles().darInfraccion().equals(infraccion))
+				infracciones.agregarElemento(copia[i]);
 
 		}
-		// Recordatorio... finalizar para ordenar
 		return infracciones;
 	}
+	public Lista<String> darInfraccionYTipoServi() {
+		Comparendo[]ordenados= copiarComparendos();
+		Lista<String> rta= new Lista<String>();
+		Sorting.mergeSortCodigo(ordenados);
+		//rta=contar(ordenados,0);
+
+		int particular=0;
+		int publico=0;
+		for (int j=0;j<ordenados.length ;j++) {
+
+			//caso primera infraccion 
+			if(j!=ordenados.length) {
+				if(ordenados[j].darDetalles().darInfraccion().equals(ordenados[j+1].darDetalles().darInfraccion())){
+					if(ordenados[j].darDetalles().darTipoServicio().equals("Particular")) {
+						particular++;
+					} 
+					else if(ordenados[j].darDetalles().darTipoServicio().equals("Público")) publico++;
+				}
+				else {
+					if(ordenados[j].darDetalles().darTipoServicio().equals("Particular")) {
+						particular++;
+					} 
+					else if(ordenados[j].darDetalles().darTipoServicio().equals("Público")) publico++;
+
+					rta.agregarElemento(ordenados[j].darDetalles().darInfraccion() + "-" + particular + "-" + publico);
+				}
+			}
+			return rta; 
+		}
+
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Lista<String> darCantidadporLocalidad () {
+		Comparendo[] copia= copiarComparendos();
+		Lista<String> localidades= new Lista<String>();
+		Lista<Integer> cantidades= new Lista<Integer>();
+		Lista<String> retornar= new Lista<String>();
+		Sorting.mergeSortLocalidad(copia);
+		int cantidad=0;
+		String nombreLocalidadActual = "";	
+		for (int i =0; i<copia.length;i++)
+		{
+			if(i == 0)
+			{
+				cantidad++;
+				localidades.agregarElemento(copia[0].darDetalles().darLocalidad());
+				nombreLocalidadActual = copia[0].darDetalles().darLocalidad();
+			}
+			else if(copia[i].darDetalles().darLocalidad().equalsIgnoreCase(nombreLocalidadActual))
+			{
+				cantidad++;
+			}
+			else
+			{
+				localidades.agregarElemento(nombreLocalidadActual);
+				cantidades.agregarElemento(cantidad);
+				nombreLocalidadActual = copia[i].darDetalles().darLocalidad();
+				cantidad = 1;
+			}
+
+
+			if(i == copia.length-1)
+			{
+				localidades.agregarElemento(nombreLocalidadActual);
+				cantidades.agregarElemento(cantidad);
+			}
+		}
+		cantidad=(int) Math.ceil(cantidad/50);
+		retornar.agregarElemento(nombreLocalidadActual+"-"+cantidad);
+		return retornar;
+
+	}
+
+
 }

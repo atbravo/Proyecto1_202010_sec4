@@ -111,11 +111,16 @@ public class Controller {
 			}
 			else if(opcion == 5)
 			{
+				String datoUsuario=view.pedir("la infraccion");
+				Lista<Comparendo> rta= modelo.consultarPorInfraccion(datoUsuario);
+				for(Comparendo comparendo : rta) {
+					view.imprimir(comparendo);
+				}
+				view.imprimir("El total de comparendos es: "+rta.darTamaño());
 
 			}
-			else if(opcion == 6)
-			{
-
+			else if(opcion == 6){
+				view.impresionTabla(modelo.darInfraccionYTipoServi());	
 			}
 			else if(opcion == 7)
 			{
@@ -175,6 +180,9 @@ public class Controller {
 					}
 				}
 
+			}
+			else if (opcion ==9) {
+			view.impresionHistograma(modelo.darCantidadporLocalidad());			
 			}
 		}
 	}

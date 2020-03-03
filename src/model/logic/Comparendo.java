@@ -32,6 +32,15 @@ public class Comparendo implements Comparable<Comparendo> {
 		String string2 = geometry.toString();
 		return string + string2;
 	}
+	/**
+	  * Compara por localidad el comparendo
+	 * @param o Comparendo que se desea comparar 
+	 * @return >0 si el actual es mayor al parametro, 0 si son iguales
+	 *  <0 de lo contario
+	 */
+	public int compareLocalidad(Comparendo o) {
+		return properties.darLocalidad().compareTo(o.darDetalles().darLocalidad());
+	}
 
 	/**
 	 * Compara por fecha SOLO fecha
@@ -48,6 +57,12 @@ public class Comparendo implements Comparable<Comparendo> {
 		}
 		return respuesta;
 	}
+	/**
+	 * Compara por Id del comparendo
+	 * @param o Comparendo que se desea comparar 
+	 * @return >0 si el actual es mayor al parametro, 0 si son iguales
+	 *  <0 de lo contario
+	 */
 	public int compareCodigo(Comparendo o)
 	{
 		return properties.darInfraccion().compareTo(o.darDetalles().darInfraccion());

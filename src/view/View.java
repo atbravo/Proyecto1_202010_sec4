@@ -154,4 +154,38 @@ public class View<E>
 	{
 		// TODO implementar
 	}
+	public void impresionHistograma(Lista<String> arreglo) {
+		System.out.println("Aproximación del número de comparendos por localidad.");
+		for(String actual: arreglo) {
+			String[] partes = actual.split("-");
+			int num= 16-partes[0].length();
+			String numeroRayas="";
+			for (int i=0; i<num;i++ ) {
+				numeroRayas+="-";
+			}
+			
+			String numeroAsteriscos="";
+			for (int i=0; i<Integer.parseInt(partes[1]);i++ ) {
+				numeroAsteriscos+="*";
+			}
+			System.out.println(partes[0]+numeroRayas+"|"+numeroAsteriscos);		
+			}
+	}
+	public void impresionTabla(Lista<String> arreglo) {
+		System.out.println("Infracción  "+ "|Particular  |Público");
+		for(String actual: arreglo) {
+			String[] partes = actual.split("-");
+			
+			int num= 12-partes[0].length();
+			String numeroEspaciosInfraccion="";
+			for (int i=0; i<num;i++ ) {
+				numeroEspaciosInfraccion+=" ";
+			}
+			String numeroEspacioParticular="";
+			for (int i=0; i<12-partes[1].length();i++ ) {
+				numeroEspacioParticular+=" ";
+			}
+			System.out.println(partes[0]+numeroEspaciosInfraccion+"|"+partes[1]+numeroEspacioParticular+"|" +partes[2]);		
+			}
+	}
 }

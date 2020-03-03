@@ -12,12 +12,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/andre/Documents/Sistemas/Bibliotecas APIs/gson-2.8.6.jar">
+	<classpathentry kind="lib" path="lib/gson-2.8.6.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/andre/Documents/Sistemas/Bibliotecas APIs/stdlib-package.jar">
+	<classpathentry kind="lib" path="lib/stdlib-package.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
