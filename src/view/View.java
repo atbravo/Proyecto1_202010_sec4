@@ -35,10 +35,11 @@ public class View<E>
 		System.out.println("2. Consultar los comparendos registrados en el archivo determinada fecha y hora");
 		System.out.println("3. Comparativo copmarendos en dos fechas dadas ");
 		System.out.println("4. Buscar el primer comparendo según la infracción específica");
-		System.out.println("5.");
-		System.out.println("6.");
+		System.out.println("5.Consultar comparendos registrados con determinada infraccion");
+		System.out.println("6.Consultar numero de infracciones particulares y publicas por infraccion");
 		System.out.println("7. Dar comparendos por infraccion en localidad, entre dos fechas");
 		System.out.println("8. Dar ranking mas comparendos por infraccion");
+		System.out.println("9. Generar histograma comparendos por infraccion");
 		try
 		{
 			respuesta = Integer.parseInt(bf.readLine());

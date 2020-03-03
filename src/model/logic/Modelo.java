@@ -217,10 +217,9 @@ public class Modelo {
 		comparendos.reiniciarActual();
 		Comparendo buscado = null;
 		for (int i = 0; i < comparendos.darTamaño() && buscado == null; i++) {
-			if (infraccion.equalsIgnoreCase(comparendos.darElementoActual().darDetalles().darInfraccion())) {
+			if (infraccion.equalsIgnoreCase(comparendos.darElementoActual().darDetalles().darInfraccion())) 
 				buscado = comparendos.darElementoActual();
-				comparendos.avanzarActual();
-			}
+			comparendos.avanzarActual();
 		}
 		if (buscado == null) 
 			throw new Exception(COMPARENDO_NO_ENCONTRADO);
