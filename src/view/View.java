@@ -39,7 +39,7 @@ public class View<E>
 		System.out.println("6.Consultar numero de infracciones particulares y publicas por infraccion");
 		System.out.println("7. Dar comparendos por infraccion en localidad, entre dos fechas");
 		System.out.println("8. Dar ranking mas comparendos por infraccion");
-		System.out.println("9. Generar histograma comparendos por infraccion");
+		System.out.println("9. Generar histograma comparendos por localidad");
 		try
 		{
 			respuesta = Integer.parseInt(bf.readLine());
