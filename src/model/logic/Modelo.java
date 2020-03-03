@@ -599,7 +599,27 @@ public class Modelo {
 	 * @return
 	 */
 	public Lista<String> darCantidadporLocalidad () {
-		Comparendo[] copia= copiarComparendos();
+		
+		Comparendo[] copia = copiarComparendos();
+		Sorting.mergeSortLocalidad(copia);
+		Lista<String> lista = new Lista<>();
+		int i = 0;
+		while(i < copia.length)
+		{
+			String localidad = copia[i].darDetalles().darLocalidad();
+			int cantidad = 0;
+			while(i < copia.length && localidad.equalsIgnoreCase(copia[i].darDetalles().darLocalidad()))
+			{
+				cantidad++;
+				i++;
+			}
+			cantidad = cantidad/ 50;
+			if(cantidad % 50 != 1)
+				cantidad++;
+			lista.agregarAlFinal(localidad + "-" + cantidad );
+		}
+		return lista;
+		/*Comparendo[] copia= copiarComparendos();
 		Lista<String> localidades= new Lista<String>();
 		Lista<Integer> cantidades= new Lista<Integer>();
 		Lista<String> retornar= new Lista<String>();
@@ -635,7 +655,7 @@ public class Modelo {
 		}
 		cantidad=(int) Math.ceil(cantidad/50);
 		retornar.agregarElemento(nombreLocalidadActual+"-"+cantidad);
-		return retornar;
+		return retornar;*/
 
 	}
 
