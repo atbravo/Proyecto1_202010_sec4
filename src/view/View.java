@@ -136,18 +136,13 @@ public class View<E>
 	 */
 	public void imprimirResultadosCarga(int tamaño, Comparendo primero, Comparendo ultimo, double[] minimax)
 	{
-		System.out.println("Total comparendos: " +  tamaño);
-		System.out.println();
-		System.out.println("Primer comparendo:");
-		System.out.println();
-		System.out.println(primero);
-		System.out.println();
-		System.out.println("Ultimo Comparendo:");
-		System.out.println();
-		System.out.println(ultimo);
-		System.out.println();
-		System.out.println("Zona minimax:" );
-		System.out.println("(" + minimax[0] + "," + minimax[1] + ") (" + minimax[2] + "," + minimax[3] + ")");
+		System.out.println("Total comparendos: " +  tamaño+"\n");
+		System.out.println("Primer comparendo:"+"\n");
+		System.out.println(primero+"\n");
+		System.out.println("Ultimo Comparendo:"+"\n");
+		System.out.println(ultimo+"\n");
+		//System.out.println("Zona minimax:" +"\n");
+		//System.out.println("(" + minimax[0] + "," + minimax[1] + ") (" + minimax[2] + "," + minimax[3] + ")\n");
 
 
 	}

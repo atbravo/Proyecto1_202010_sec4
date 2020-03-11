@@ -1,6 +1,8 @@
 package model.logic;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,9 +27,11 @@ import java.lang.Math;
  */
 public class Modelo {
 
-	public final String RUTA = "./data/comparendos_dei_2018.geojson";
+	public final String RUTA = "./data/Comparendos_dei_2018.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
-
+	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
+	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm";
+	
 	/**
 	 * Atributos del modelo del mundo
 	 */
@@ -43,7 +47,7 @@ public class Modelo {
 	public Modelo() {
 		// datos = new ArregloDinamico(7);
 		comparendos = new Lista<>();
-		cargar();
+		cargarDatos();
 	}
 
 	/**
@@ -98,39 +102,49 @@ public class Modelo {
 	/**
 	 * Carga la informacion en el archivo indicado.
 	 */
-	public void cargar() {
+	public Lista<Comparendo> cargarDatos() {
+		JsonReader reader;
 		try {
-			JsonReader bf = new JsonReader(new FileReader(RUTA));
-			JsonElement element = JsonParser.parseReader(bf);
-			if (element.isJsonObject()) {
-				JsonObject admin = element.getAsJsonObject();
-				JsonArray listaComparendos = admin.getAsJsonArray("features");
-				Gson gson = new Gson();
-				for (int i = 0; i < listaComparendos.size(); i++) {
-					JsonObject comparendo = listaComparendos.get(i).getAsJsonObject();
-					agregarJsonObject(comparendo);
-				}
+			File ar=new File(RUTA);
+			reader = new JsonReader(new FileReader(ar));
+			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
+			JsonArray e2 = elem.get("features").getAsJsonArray();
+
+
+			SimpleDateFormat parser=new SimpleDateFormat(FORMATO_DOCUMENTO);
+
+
+			for(JsonElement e: e2) {
+				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
+
+				String  FECHA_HORA =   e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();
+
+				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETE").getAsString();
+				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHI").getAsString();
+				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVI").getAsString();
+				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION").getAsString();
+				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRAC").getAsString();	
+				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD").getAsString();
+				//String MUNICIPIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("MUNICIPIO").getAsString();
+
+				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(0).getAsDouble();
+
+				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(1).getAsDouble();
+
+				Comparendo c = new Comparendo("Type","",latitud, longitud,0.0 ,OBJECTID, FECHA_HORA,  MEDIO_DETE,  CLASE_VEHI,TIPO_SERVI, INFRACCION, DES_INFRAC, LOCALIDAD );
+				
+				comparendos.agregarAlFinal(c);
 			}
-		} catch (Exception e) {
+
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		return comparendos;	
 
 	}
-
-	/**
-	 * Recibe un JsonObject que representa un comparendo y lo guarda en la lista
-	 * tras convertirlo en un objeto en java
-	 * 
-	 * @param jComparendo
-	 *            el JsonObject que representa un comparendo
-	 */
-	public void agregarJsonObject(JsonObject jComparendo) {
-		GsonBuilder builder = new GsonBuilder();
-		Gson gson = builder.create();
-		Comparendo comparendo = gson.fromJson(jComparendo, Comparendo.class);
-		agregarLista(comparendo);
-	}
-
 	/**
 	 * agrega un comparendo recibido por parametro al final de la lista
 	 * 
@@ -244,8 +258,9 @@ public class Modelo {
 	 * @return lista con comparendos en la fecha buscada
 	 */
 	public Lista<Comparendo> darComparendosenFecha(String fecha) throws Exception {
+		Date fecha1 = new Date();
 		try {
-			Date fecha1 = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
+			 fecha1 = new SimpleDateFormat(FORMATO_ESPERADO).parse(fecha);
 		} catch (Exception e) {
 			throw new Exception("La fecha no está en el formato esperado");
 		}
@@ -405,6 +420,7 @@ public class Modelo {
 		return respuesta;
 	}
 
+
 	/**
 	 * Retorna las tres infracciones que mas se registraron ENTRE dos fechas
 	 * dads
@@ -519,6 +535,7 @@ public class Modelo {
 		return respuesta;
 	}
 
+
 	/**
 	 * Retorna la mayor de las fechas que entran por parametro
 	 * 
@@ -588,8 +605,9 @@ public class Modelo {
 
 					rta.agregarElemento(ordenados[j].darDetalles().darInfraccion() + "-" + particular + "-" + publico);
 				}
-			}
 			
+			}
+
 		}
 		return rta; 
 
@@ -599,7 +617,7 @@ public class Modelo {
 	 * @return
 	 */
 	public Lista<String> darCantidadporLocalidad () {
-		
+
 		Comparendo[] copia = copiarComparendos();
 		Sorting.mergeSortLocalidad(copia);
 		Lista<String> lista = new Lista<>();
@@ -619,43 +637,6 @@ public class Modelo {
 			lista.agregarAlFinal(localidad + "-" + cantidad );
 		}
 		return lista;
-		/*Comparendo[] copia= copiarComparendos();
-		Lista<String> localidades= new Lista<String>();
-		Lista<Integer> cantidades= new Lista<Integer>();
-		Lista<String> retornar= new Lista<String>();
-		Sorting.mergeSortLocalidad(copia);
-		int cantidad=0;
-		String nombreLocalidadActual = "";	
-		for (int i =0; i<copia.length;i++)
-		{
-			if(i == 0)
-			{
-				cantidad++;
-				localidades.agregarElemento(copia[0].darDetalles().darLocalidad());
-				nombreLocalidadActual = copia[0].darDetalles().darLocalidad();
-			}
-			else if(copia[i].darDetalles().darLocalidad().equalsIgnoreCase(nombreLocalidadActual))
-			{
-				cantidad++;
-			}
-			else
-			{
-				localidades.agregarElemento(nombreLocalidadActual);
-				cantidades.agregarElemento(cantidad);
-				nombreLocalidadActual = copia[i].darDetalles().darLocalidad();
-				cantidad = 1;
-			}
-
-
-			if(i == copia.length-1)
-			{
-				localidades.agregarElemento(nombreLocalidadActual);
-				cantidades.agregarElemento(cantidad);
-			}
-		}
-		cantidad=(int) Math.ceil(cantidad/50);
-		retornar.agregarElemento(nombreLocalidadActual+"-"+cantidad);
-		return retornar;*/
 
 	}
 
