@@ -29,8 +29,8 @@ public class Modelo {
 
 	public final String RUTA = "./data/Comparendos_dei_2018.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
-	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
-	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm";
+	public final String FORMATO_ESPERADO = "yyyy/MM/dd";
+	public final String FORMATO_DOCUMENTO = "yyyy/MM/dd";
 	
 	/**
 	 * Atributos del modelo del mundo
